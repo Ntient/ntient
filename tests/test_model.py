@@ -4,6 +4,8 @@ from pytest_mock import mocker
 import json
 import requests
 import os
+from sklearn.tree import DecisionTreeClassifier
+import joblib
 
 
 def setup_response(data):
@@ -12,6 +14,9 @@ def setup_response(data):
     resp.status_code = 200
 
     return resp
+
+def load_model():
+    return joblib.load("tests/sklearn_model.joblib")
 
 
 def test_model_does_not_init_without_organization_name(cli_context):
@@ -40,16 +45,16 @@ def test_model_does_not_init_without_filename(cli_context):
             name="Test Name"
         )
 
-    assert str(exception.value) == "Filename is required!"
+    assert str(exception.value) == "Model is required!"
 
 
 def test_model_does_not_init_without_model_type(cli_context):
     import ntient
     with pytest.raises(ValueError) as exception:
         ntient.Model(
+            model=load_model(),
             organization="Test Org",
             name="Test Name",
-            filename="testfile.txt"
         )
 
     assert str(exception.value) == "Model Type is required!"
@@ -57,11 +62,12 @@ def test_model_does_not_init_without_model_type(cli_context):
 
 def test_model_does_not_init_if_model_type_not_allowed(cli_context):
     import ntient
+    model = load_model()
     with pytest.raises(ValueError) as exception:
         ntient.Model(
+            model=model,
             organization="Test Org",
             name="Test Name",
-            filename="testfile.txt",
             model_type="NOT ALLOWED"
         )
 
@@ -75,10 +81,10 @@ def test_model_sends_request_to_server_for_creation(cli_context, mocker):
         requests, "post", return_value=resp)
 
     model = ntient.Model(
+        model=load_model(),
         organization="test_org",
         name="Test Name",
-        filename="keras_model.zip",
-        model_type="keras"
+        model_type="sklearn DecisionTreeClassifier"
     )
 
     input_json = {'name': model.name, 'model_type': model.model_type,
@@ -100,18 +106,17 @@ def test_model_sends_request_to_server_for_uploading_file(cli_context, mocker):
     )
 
     model = ntient.Model(
+        model=load_model(),
         organization="test_org",
         name="Test Name",
-        filename="keras_model.zip",
-        model_type="keras"
+        model_type="sklearn DecisionTreeClassifier"
     )
 
     model.model_id = 1
 
-    input_file = open("keras_model.zip", "wb")
-    data = {"file": input_file}
-
+    model.dump_model()
     model.upload_file()
+    os.remove(model.filename)
 
     # Eventually figure out how to get this to path with arguments included
     requests_mock.assert_called()
@@ -133,10 +138,10 @@ def test_introspect_response_is_handled_correctly(cli_context, mocker):
     )
 
     model = ntient.Model(
+        model=load_model(),
         organization="test_org",
         name="Test Name",
-        filename="keras_model.zip",
-        model_type="keras"
+        model_type="sklearn DecisionTreeClassifier"
     )
 
     model.model_id = 1
@@ -170,10 +175,10 @@ def test_introspect_writes_files(cli_context, mocker):
     )
 
     model = ntient.Model(
+        model=load_model(),
         organization="test_org",
         name="Test Name",
-        filename="keras_model.zip",
-        model_type="keras"
+        model_type="sklearn DecisionTreeClassifier"
     )
 
     model.model_id = 1
@@ -202,10 +207,10 @@ def test_model_deploy_calls_api_with_proper_format(cli_context, mocker):
     )
 
     model = ntient.Model(
+        model=load_model(),
         organization="test_org",
         name="Test Name",
-        filename="keras_model.zip",
-        model_type="keras"
+        model_type="sklearn DecisionTreeClassifier"
     )
 
     model.model_id = 1

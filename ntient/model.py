@@ -1,14 +1,15 @@
 import requests
 import json
 from .base import Base
+from .packager import Packager
 
 
 class Model(Base):
 
     def __init__(self,
+                 model: object = None,
                  organization: str = "",
                  name: str = "",
-                 filename: str = "",
                  model_type: str = "",
                  input_mapping_json: dict = {},
                  output_mapping_json: dict = {},
@@ -19,7 +20,7 @@ class Model(Base):
 
         self.organization = organization
         self.name = name
-        self.filename = filename
+        self.model = model
         self.model_type = model_type
         self.json_input_filename = f"{self.name}_input.json"
         self.json_output_filename = f"{self.name}_output.json"
@@ -27,6 +28,7 @@ class Model(Base):
         self.output_mapping = {}
         self.existing_model = existing_model
         self.deployed = self.existing_model
+        self.packager = Packager(model)
 
         if input_mapping_json:
             self.input_mapping = json.loads(input_mapping_json)
@@ -76,7 +78,8 @@ class Model(Base):
             "sklearn GMM ",
             "sklearn GaussianMixture",
             "sklearn VBGMM",
-            "keras"
+            "keras",
+            "pytorch"
         ]
 
         if not organization:
@@ -85,8 +88,8 @@ class Model(Base):
         if not name:
             raise ValueError("Name is required!")
 
-        if not filename:
-            raise ValueError("Filename is required!")
+        if not model:
+            raise ValueError("Model is required!")
 
         if not model_type:
             raise ValueError("Model Type is required!")
@@ -102,8 +105,12 @@ class Model(Base):
         else:
             print("CANNOT OVERWRITE EXISTING MODEL RECORD")
 
+        self.dump_model()
+
         print("UPLOADING MODEL FILE")
         self.upload_file()
+
+        os.remove(self.filename)
 
         print("INTROSPECTING MODEL")
         response = self.introspect_model()
@@ -116,6 +123,11 @@ class Model(Base):
         print("MODEL PUSHED.")
 
         print(f"\n\nEDIT {self.json_input_filename} and {self.json_output_filename}, and run model.add_spec().")
+
+    def dump_model(self):
+        model_general_type = self.model_type.split(" ")[0]
+        func = self.packager.function_map[model_general_type]
+        self.filename = func()
 
     def update_mapping(self, mapping):
         keys = list(mapping.keys())
