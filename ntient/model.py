@@ -122,7 +122,10 @@ class Model(Base):
 
         print("MODEL PUSHED.")
 
-        print(f"\n\nEDIT {self.json_input_filename} and {self.json_output_filename}, and run model.add_spec().")
+        print("DESIGN MODEL API")
+        self.update_input_mapping()
+        self.update_output_mapping()
+        self.add_spec()
 
     def dump_model(self):
         model_general_type = self.model_type.split(" ")[0]
