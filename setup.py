@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='ntient',
-    packages=find_packages(include=['ntient']),
+    packages=find_packages(exclude=['tests']),
     version='0.1.0',
     description="Ntient Client Library",
     author="Joel Davenport",
