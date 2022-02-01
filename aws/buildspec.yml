@@ -12,6 +12,5 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing Docker image...
 artifacts:
   files: imagedefinitions.json

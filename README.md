@@ -4,7 +4,7 @@ NTIENT allows you to deploy and integrate AI models in minutes. This package int
 
 Version: 0.1
 
-Test Status: 
+Test Status: <img src="https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicUJERHZCblBMcm9rMWdlUXRSNVhBdmhNQXMrVFZZMDVjWDBGMDlWTDRvQm04bmFlNVVpb2F1OHB2ekdDVXFWemtEaU9wd0d0VGNZZVd1WW40Vy85NzVJPSIsIml2UGFyYW1ldGVyU3BlYyI6IjhUQVNuWmcxQUdDMUdNR0IiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master" >
 
 # Usage
 To use the package, you'll need to set a couple of environment variables.
