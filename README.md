@@ -2,9 +2,11 @@
 
 NTIENT allows you to deploy and integrate AI models in minutes. This package interfaces with the API to manage models, deployments, and APIs.
 
-Version: 0.1
+Version: 0.1.2
 
 Test Status: <img src="https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicUJERHZCblBMcm9rMWdlUXRSNVhBdmhNQXMrVFZZMDVjWDBGMDlWTDRvQm04bmFlNVVpb2F1OHB2ekdDVXFWemtEaU9wd0d0VGNZZVd1WW40Vy85NzVJPSIsIml2UGFyYW1ldGVyU3BlYyI6IjhUQVNuWmcxQUdDMUdNR0IiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master" >
+
+Install with pip: `pip install ntient`
 
 # Usage
 To use the package, you'll need to set a couple of environment variables.
