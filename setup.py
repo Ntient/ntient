@@ -1,10 +1,14 @@
 from setuptools import find_packages, setup
 
+long_description = open("README.md").read()
+
 setup(
     name='ntient',
     packages=find_packages(exclude=['tests']),
-    version='0.1.1',
+    version='0.1.2',
     description="Ntient Client Library",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author="Joel Davenport",
     license="MIT",
     install_requires=['requests'],
