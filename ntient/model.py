@@ -13,7 +13,8 @@ class Model(Base):
                  model_type: str = "",
                  input_mapping_json: dict = {},
                  output_mapping_json: dict = {},
-                 existing_model: bool = False
+                 existing_model: bool = False,
+                 filename: str = ""
                  ):
 
         super(Model, self).__init__()
@@ -28,6 +29,7 @@ class Model(Base):
         self.output_mapping = {}
         self.existing_model = existing_model
         self.deployed = self.existing_model
+        self.filename = filename
         self.packager = Packager(model)
 
         if input_mapping_json:
