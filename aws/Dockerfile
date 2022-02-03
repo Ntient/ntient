@@ -12,6 +12,7 @@ WORKDIR /ntient
 # install dependencies
 COPY . .
 
+RUN pip install twine
 RUN python setup.py test
 RUN python setup.py sdist
 RUN twine upload dist/*
