@@ -79,7 +79,8 @@ class Model(Base):
             "sklearn GaussianMixture",
             "sklearn VBGMM",
             "keras",
-            "pytorch"
+            "pytorch",
+            "yoloV5"
         ]
 
         if not organization:
@@ -97,6 +98,9 @@ class Model(Base):
         if model_type not in allowed_model_types:
             raise ValueError(f"Model Type: {self.model_type} not supported. Supported model types: {','.join(allowed_model_types)}")
 
+        if model_type == "yoloV5" and not self.filename:
+            raise ValueError(f"Model Type: {self.model_type} requires a filename. Locate your weights file, and pass it in the filename arg.")
+
     def push(self):
         # create the model
         if not self.existing_model:
@@ -105,7 +109,8 @@ class Model(Base):
         else:
             print("CANNOT OVERWRITE EXISTING MODEL RECORD")
 
-        self.dump_model()
+        if not self.filename:
+            self.dump_model()
 
         print("UPLOADING MODEL FILE")
         self.upload_file()
