@@ -13,6 +13,5 @@ WORKDIR /ntient
 COPY . .
 
 RUN python setup.py test
-
 RUN python setup.py sdist
 RUN twine upload dist/*

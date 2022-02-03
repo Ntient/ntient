@@ -8,7 +8,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building Docker image
-      - docker build -f aws/Dockerfile .
+      - docker build -f aws/Dockerfile --build-arg TWINE_USERNAME=$TWINE_USERNAME --build-arg TWINE_PASSWORD=$TWINE_PASSWORD .
   post_build:
     commands:
       - echo Build completed on `date`
