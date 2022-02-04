@@ -2,7 +2,7 @@ import requests
 import json
 from .base import Base
 from .packager import Packager
-
+import os
 
 class Model(Base):
 
@@ -91,7 +91,7 @@ class Model(Base):
         if not name:
             raise ValueError("Name is required!")
 
-        if not model:
+        if model_type not in ["yoloV5"] and not model:
             raise ValueError("Model is required!")
 
         if not model_type:
@@ -117,21 +117,24 @@ class Model(Base):
         print("UPLOADING MODEL FILE")
         self.upload_file()
 
-        os.remove(self.filename)
+        if self.model_type not in ["yoloV5"]:
+            os.remove(self.filename)
 
         print("INTROSPECTING MODEL")
-        response = self.introspect_model()
-        self.input_mapping = response["input_format"]
-        self.output_mapping = response["output_format"]
+        introspect_response = self.introspect_model()
+        self.input_mapping = introspect_response["input_format"]
+        self.output_mapping = introspect_response["output_format"]
 
         print("WRITING FORMAT FILES")
         self.write_format_files(self.input_mapping, self.output_mapping)
 
         print("MODEL PUSHED.")
 
-        print("DESIGN MODEL API")
-        self.update_input_mapping()
-        self.update_output_mapping()
+        if not introspect_response["predefined"]:
+            print("DESIGN MODEL API")
+            self.update_input_mapping()
+            self.update_output_mapping()
+        
         self.add_spec()
 
     def dump_model(self):
@@ -141,14 +144,15 @@ class Model(Base):
 
     def update_mapping(self, mapping):
         keys = list(mapping.keys())
-        datatypes = ["int", "float", "str", ""]
+        datatypes = ["int", "float", "str", "", "array"]
+        datatypes_str = ', '.join(datatypes)
 
         for key in keys:
             print(f"Update Input Field {int(key) + 1}. Leave blank to skip")
             name = input(f"Field {int(key) + 1} Name: ")
             datatype = None
             while datatype not in datatypes:
-                datatype = input(f"Field {int(key) + 1} Type (int, float, str): ")
+                datatype = input(f"Field {int(key) + 1} Type ({datatypes_str}): ")
 
             if name != "":
                 mapping[key]["name"] = name
