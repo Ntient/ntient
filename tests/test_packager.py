@@ -6,13 +6,13 @@ import torch
 import os
 
 def load_sklearn():
-    return joblib.load("tests/sklearn_model.joblib")
+    return joblib.load("tests/support/sklearn_model.joblib")
 
 def load_keras():
-    return keras.models.load_model("tests/keras_model.h5")
+    return keras.models.load_model("tests/support/keras_model.h5")
 
 def load_pytorch():
-    return torch.load("tests/pytorch_model.pt")
+    return torch.load("tests/support/pytorch_model.pt")
 
 
 def test_packager_packages_sklearn(cli_context):
