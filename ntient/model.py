@@ -1,6 +1,7 @@
 import requests
 import json
 from .base import Base
+from .user import User
 from .packager import Packager
 import os
 
@@ -14,7 +15,9 @@ class Model(Base):
                  input_mapping_json: dict = {},
                  output_mapping_json: dict = {},
                  existing_model: bool = False,
-                 filename: str = ""
+                 filename: str = "",
+                 s3_path: str = "",
+
                  ):
 
         super(Model, self).__init__()
@@ -31,6 +34,7 @@ class Model(Base):
         self.deployed = self.existing_model
         self.filename = filename
         self.packager = Packager(model)
+        self.s3_path = s3_path
 
         if input_mapping_json:
             self.input_mapping = json.loads(input_mapping_json)
@@ -90,9 +94,6 @@ class Model(Base):
 
         if not name:
             raise ValueError("Name is required!")
-
-        if model_type not in ["yoloV5"] and not model:
-            raise ValueError("Model is required!")
 
         if not model_type:
             raise ValueError("Model Type is required!")

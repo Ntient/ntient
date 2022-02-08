@@ -16,7 +16,7 @@ def setup_response(data):
     return resp
 
 def load_model():
-    return joblib.load("tests/sklearn_model.joblib")
+    return joblib.load("tests/support/sklearn_model.joblib")
 
 
 def test_model_does_not_init_without_organization_name(cli_context):
@@ -35,17 +35,6 @@ def test_model_does_not_init_without_name(cli_context):
         )
 
     assert str(exception.value) == "Name is required!"
-
-
-def test_model_does_not_init_without_filename(cli_context):
-    import ntient
-    with pytest.raises(ValueError) as exception:
-        ntient.Model(
-            organization="Test Org",
-            name="Test Name"
-        )
-
-    assert str(exception.value) == "Model is required!"
 
 
 def test_model_does_not_init_without_model_type(cli_context):
@@ -124,8 +113,8 @@ def test_model_sends_request_to_server_for_uploading_file(cli_context, mocker):
 
 def test_introspect_response_is_handled_correctly(cli_context, mocker):
     import ntient
-    input_json = json.load(open("tests/test_input_format.json"))
-    output_json = json.load(open("tests/test_output_format.json"))
+    input_json = json.load(open("tests/support/test_input_format.json"))
+    output_json = json.load(open("tests/support/test_output_format.json"))
     data = {
         "input_format": input_json,
         "output_format": output_json
@@ -155,13 +144,13 @@ def test_introspect_response_is_handled_correctly(cli_context, mocker):
         params=None
     )
 
-    assert response == json.load(open("tests/test_generated_format.json"))
+    assert response == json.load(open("tests/support/test_generated_format.json"))
 
 
 def test_introspect_writes_files(cli_context, mocker):
     import ntient
-    input_json = json.load(open("tests/test_input_format.json"))
-    output_json = json.load(open("tests/test_output_format.json"))
+    input_json = json.load(open("tests/support/test_input_format.json"))
+    output_json = json.load(open("tests/support/test_output_format.json"))
 
     data = {
         "input_format": input_json,
@@ -190,7 +179,7 @@ def test_introspect_writes_files(cli_context, mocker):
     assert os.path.exists(f"{model.name}_input.json")
     assert os.path.exists(f"{model.name}_output.json")
 
-    generated_format = json.load(open("tests/test_generated_format.json"))
+    generated_format = json.load(open("tests/support/test_generated_format.json"))
 
     assert json.load(open(f"{model.name}_input.json")) == generated_format["input_format"]
     assert json.load(open(f"{model.name}_output.json")) == generated_format["output_format"]
@@ -230,3 +219,19 @@ def test_model_deploy_calls_api_with_proper_format(cli_context, mocker):
         json=input_data,
         headers={"Authorization": f"Bearer test_token"}
     )
+
+def test_model_allows_for_s3_path_call(cli_context, mocker):
+    import ntient
+    resp = setup_response({"id": 1})
+    requests_mock = mocker.patch.object(
+        requests, "post", return_value=resp)
+
+    model = ntient.Model(
+        model=load_model(),
+        organization="test_org",
+        name="Test Name",
+        model_type="sklearn DecisionTreeClassifier",
+        s3_path="dummy_path"
+    )
+
+    assert model.s3_path == "dummy_path"
