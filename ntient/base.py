@@ -15,6 +15,11 @@ class Base():
         self.check_response(response)
         return response.json()
 
+    def get_file(self, url):
+        response = requests.get(url, headers=self.headers, params=params)
+        self.check_response(response)
+        return response.content
+
     def post_request(self, url, data):
         response = requests.post(
             url, json=data, headers=self.headers)

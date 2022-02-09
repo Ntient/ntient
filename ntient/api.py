@@ -48,7 +48,6 @@ class API(Base):
                 raise AuthorizationException
 
             return True
-            # ping deployment api with model_id and token to see if we have access to this thing
         
         if client_id:
             url = f"{self.host}/{self.organization}/deployment/{deployment_id}/aplication/authorize"

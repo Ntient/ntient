@@ -17,7 +17,6 @@ class Model(Base):
                  existing_model: bool = False,
                  filename: str = "",
                  s3_path: str = "",
-
                  ):
 
         super(Model, self).__init__()
@@ -137,6 +136,19 @@ class Model(Base):
             self.update_output_mapping()
         
         self.add_spec()
+
+    def download_model(self, local_filepath):
+        if not existing_model:
+            raise Exception("Model File not uploaded")
+
+        target_url = f"{self.host}/{self.organization}/ml_model/{self.model_id}/download"
+
+        file_content = self.get_request(target_url)
+        f = open(local_filepath, "wb")
+        f.write(file_content)
+        f.close()
+
+        return local_filepath
 
     def dump_model(self):
         model_general_type = self.model_type.split(" ")[0]
