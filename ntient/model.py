@@ -34,6 +34,7 @@ class Model(Base):
         self.filename = filename
         self.packager = Packager(model)
         self.s3_path = s3_path
+        self.model_id = None
 
         if input_mapping_json:
             self.input_mapping = json.loads(input_mapping_json)
@@ -138,12 +139,15 @@ class Model(Base):
         self.add_spec()
 
     def download_model(self, local_filepath):
-        if not existing_model:
+        if not self.existing_model:
             raise Exception("Model File not uploaded")
+
+        if not self.model_id:
+            raise Exception("No Model ID assigned")
 
         target_url = f"{self.host}/{self.organization}/ml_model/{self.model_id}/download"
 
-        file_content = self.get_request(target_url)
+        file_content = self.get_file(target_url)
         f = open(local_filepath, "wb")
         f.write(file_content)
         f.close()

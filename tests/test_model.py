@@ -222,9 +222,6 @@ def test_model_deploy_calls_api_with_proper_format(cli_context, mocker):
 
 def test_model_allows_for_s3_path_call(cli_context, mocker):
     import ntient
-    resp = setup_response({"id": 1})
-    requests_mock = mocker.patch.object(
-        requests, "post", return_value=resp)
 
     model = ntient.Model(
         model=load_model(),
@@ -235,3 +232,31 @@ def test_model_allows_for_s3_path_call(cli_context, mocker):
     )
 
     assert model.s3_path == "dummy_path"
+
+def test_model_allows_for_downloading_file(cli_context, mocker):
+    import ntient
+    model = ntient.Model(
+        model=load_model(),
+        organization="test_org",
+        name="Test Name",
+        model_type="sklearn DecisionTreeClassifier",
+        s3_path="dummy_path",
+        existing_model=True
+    )
+
+    model.model_id = 1
+
+    f = open("tests/support/sklearn_model.joblib", "rb")
+
+    resp = requests.Response()
+    resp.body = f.read()
+    resp.status_code = 200
+    resp.stream = True
+
+    requests_mock = mocker.patch.object(
+        requests, "get", return_value=resp
+    )
+
+    model.download_model("/tmp/model.joblib")
+
+    assert os.path.exists("/tmp/model.joblib")

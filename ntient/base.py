@@ -16,9 +16,9 @@ class Base():
         return response.json()
 
     def get_file(self, url):
-        response = requests.get(url, headers=self.headers, params=params)
+        response = requests.get(url, headers=self.headers)
         self.check_response(response)
-        return response.content
+        return response.body
 
     def post_request(self, url, data):
         response = requests.post(
