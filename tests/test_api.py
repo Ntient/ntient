@@ -13,8 +13,8 @@ def model_response():
         "deployments": [],
         "monthly_usage": 0.0,
         "total_usage": 0.0,
-        "input_mapping": {},
-        "output_mapping": {}
+        "input_mapping": {"test": "test"},
+        "output_mapping": {"test": "test"}
     }
 
 def setup_response():

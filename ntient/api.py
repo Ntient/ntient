@@ -26,10 +26,11 @@ class API(Base):
             filename=model_json["filename"],
             model_type=model_json["model_type"],
             existing_model=True,
-            input_mapping_json=model_json["input_mapping"],
-            output_mapping_json=model_json["output_mapping"],
             s3_path=model_json["s3_path"]
         )
+
+        model.input_mapping = model_json["input_mapping"],
+        model.output_mapping = model_json["output_mapping"],
 
         model.model_id = model_json["id"]
 
