@@ -249,7 +249,7 @@ def test_model_allows_for_downloading_file(cli_context, mocker):
     f = open("tests/support/sklearn_model.joblib", "rb")
 
     resp = requests.Response()
-    resp.body = f.read()
+    resp.content = f.read()
     resp.status_code = 200
     resp.stream = True
 

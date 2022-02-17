@@ -5,7 +5,7 @@ long_description = open("README.md").read()
 setup(
     name='ntient',
     packages=find_packages(exclude=['tests']),
-    version='0.1.7',
+    version='0.1.8',
     description="Ntient Client Library",
     long_description=long_description,
     long_description_content_type='text/markdown',

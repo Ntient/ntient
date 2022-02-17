@@ -18,7 +18,7 @@ class Base():
     def get_file(self, url):
         response = requests.get(url, headers=self.headers)
         self.check_response(response)
-        return response.body
+        return response.content
 
     def post_request(self, url, data):
         response = requests.post(
