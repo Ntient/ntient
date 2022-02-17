@@ -29,8 +29,8 @@ class API(Base):
             s3_path=model_json["s3_path"]
         )
 
-        model.input_mapping = model_json["input_mapping"],
-        model.output_mapping = model_json["output_mapping"],
+        model.input_mapping = model_json["input_mapping"]
+        model.output_mapping = model_json["output_mapping"]
 
         model.model_id = model_json["id"]
 
