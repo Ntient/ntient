@@ -86,7 +86,8 @@ class Model(Base):
             "sklearn VBGMM",
             "keras",
             "pytorch",
-            "yoloV5"
+            "yoloV5",
+            "xgboost"
         ]
 
         if not organization:
@@ -156,6 +157,9 @@ class Model(Base):
 
     def dump_model(self):
         model_general_type = self.model_type.split(" ")[0]
+        if model_general_type == "xgboost":
+            model_general_type = "sklearn"
+
         func = self.packager.function_map[model_general_type]
         self.filename = func()
 

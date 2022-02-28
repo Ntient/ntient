@@ -2,7 +2,7 @@
 
 NTIENT allows you to deploy and integrate AI models in minutes. This package interfaces with the API to manage models, deployments, and APIs.
 
-**Version**: 0.1.9
+**Version**: 0.2.0
 
 **Test Status**: <img src="https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicUJERHZCblBMcm9rMWdlUXRSNVhBdmhNQXMrVFZZMDVjWDBGMDlWTDRvQm04bmFlNVVpb2F1OHB2ekdDVXFWemtEaU9wd0d0VGNZZVd1WW40Vy85NzVJPSIsIml2UGFyYW1ldGVyU3BlYyI6IjhUQVNuWmcxQUdDMUdNR0IiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master" >
 
